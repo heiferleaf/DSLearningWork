@@ -1,0 +1,192 @@
+#include<iostream>
+#include<fstream>
+#include<sstream>
+using namespace std;
+
+void str_to_int(string& s, int& e)
+{
+	stringstream ss;
+	ss << s;
+	ss >> e;
+}
+struct Node
+{
+	int data;
+	Node* next;
+	Node():next(NULL){}
+	Node(int e):data(e),next(NULL){}
+};
+class Linklist
+{
+public:
+	Node* head;
+	Linklist()
+	{
+		head = new Node();
+	}
+	void Create_front(int a[], int n)
+	{
+		Node* tail = head;
+		Node* insert;
+		for (int i = 0; i < n; i++)
+		{
+			insert = new Node(a[i]);
+			tail->next = insert;
+			tail = insert;
+		}
+	}
+	
+	int get_min()
+	{
+		Node* n = head->next;
+		int i=1, min=n->data,mini=1;
+		n = n->next;
+		while (n != NULL)
+		{
+			i++;
+			if (n->data <= min)
+			{
+				min = n->data;
+				mini = i;
+			}
+			n = n->next;
+		}
+		return mini;
+	}
+	~Linklist()
+	{
+		Node* pre = head;
+		Node* s = pre->next;
+
+		while (s != NULL)
+		{
+			delete pre;
+			pre = s;
+			s = s->next;
+		}
+		delete pre;
+	}
+};
+
+int main()
+{
+	Linklist linl;
+
+	ifstream ifs;
+	ifs.open("in.txt");
+	string s;
+	int n,num;
+	
+	ifs >> s;
+	str_to_int(s, n);
+	int* a = new int[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		ifs >> s;
+		str_to_int(s, num);
+		a[i] = num;
+	}
+	
+	linl.Create_front(a, n);
+	delete[]a;
+	int numi = linl.get_min();
+	cout << numi;
+}
+//void sort(int a[], int n)
+//{
+//	for (int i = 0; i < n - 1; i++)
+//	{
+//		int num = 0;
+//		for (int j = 0; j < n - 1 - i; j++)
+//		{
+//			static int temp;
+//			if (a[j] > a[j + 1])
+//			{
+//				temp = a[j];
+//				a[j] = a[j + 1];
+//				a[j + 1] = temp;
+//				num++;
+//			}
+//		}
+//		if (!num)
+//		{
+//			return;
+//		}
+//	}
+//}
+//
+//int main()
+//{
+//	ifstream ifs;
+//	ifs.open("in.txt");
+//	int lenA, lenB;
+//	string s;
+//
+//	ifs >> s;
+//	str_to_int(s, lenA);
+//
+//	ifs >> s;
+//	str_to_int(s, lenB);
+//
+//	int* a = new int[lenA];
+//	int* b = new int[lenB];
+//	int ea, eb;
+//	for (int i = 0; i < lenA; i++)
+//	{
+//		ifs >> s;
+//		str_to_int(s, ea);
+//		a[i] = ea;
+//
+//	}
+//	for (int j = 0; j < lenB; j++)
+//	{
+//		ifs >> s;
+//		str_to_int(s, eb);
+//		b[j] = eb;
+//	}
+//
+//	sort(a, lenA);
+//	sort(b, lenB);
+//
+//	int i = 0, j = 0;
+//	while (i < lenA && j < lenB)
+//	{
+//		if (a[i] < b[j])
+//		{
+//			cout << a[i] << " ";
+//			i++;
+//		}
+//		else if (a[i] == b[j])
+//		{
+//			cout << a[i] << " ";
+//			i++;
+//			j++;
+//		}
+//		else
+//		{
+//			cout << b[j] << " ";
+//			j++;
+//		}
+//	}
+//	if (i == lenA)
+//	{
+//		while (j < lenB)
+//		{
+//			cout << b[j] << " ";
+//			j++;
+//		}
+//	}
+//	if (j == lenB)
+//	{
+//		while (i < lenA)
+//		{
+//			cout << a[i] << " ";
+//			i++;
+//		}
+//	}
+//	cout << endl;
+//
+//	return 0;
+//}
+
