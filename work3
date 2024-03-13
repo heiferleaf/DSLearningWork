@@ -1,0 +1,120 @@
+#include<iostream>
+#include<vector>
+#include<sstream>
+#include<fstream>
+using namespace std;
+
+struct Node
+{
+	int data;
+	Node* next;
+	Node() :next(nullptr){}
+	Node(int data):data(data),next(nullptr){}
+};
+
+class LinkList
+{
+public:
+	Node* head;
+	LinkList()
+	{
+		head = new Node();
+	}
+
+	void Create_back(vector<int> v, int n)
+	{
+		Node* rear = head,*s;
+		for (int i = 0; i < n; i++)
+		{
+			s = new Node(v[i]);
+			rear->next = s;
+			rear = s;
+		}
+	}
+	
+	int renum(int k)
+	{
+		Node* pa=head, * pb = head;
+		for (int i = 0; i < k; i++)
+		{
+			pb = pb->next;
+		}
+		while (pb->next != NULL)
+		{
+			pb = pb->next;
+			pa = pa->next;
+		}
+		return pa->next->data;
+	}
+	void DispList()
+	{
+		Node* n = head->next;
+		while (n != NULL)
+		{
+			cout << n->data << " ";
+			n = n->next;
+		}
+		cout << endl;
+	}
+	~LinkList()
+	{
+		Node* p = head,*r=head->next;
+		while (p != NULL)
+		{
+			delete r;
+			r = p;
+			p = p->next;
+		}
+		delete r;
+	}
+};
+
+int str_to_int(string s)
+{
+	int num;
+	stringstream ss;
+	ss << s;
+	ss >> num;
+	return num;
+}
+
+int main()
+{
+
+	/*ifstream ifs("in.txt");
+	string s;
+	int num;
+	vector<int> va;
+	while (ifs >> s)
+	{
+		num = str_to_int(s);
+		va.push_back(num);
+	}
+	LinkList link,link1;
+	link.Create_back(va, va.size());
+	link.sort(link1);
+	link1.DispList();*/
+	vector<int>va;
+	int k, num;
+	cin >> k;
+	while (cin >> num)
+	{
+		va.push_back(num);
+		if (cin.get() == '\n')
+		{
+			break;
+		}
+	}
+	if (k > va.size())
+	{
+		cout << "Not Found" << endl;
+	}
+	else
+	{
+		LinkList link;
+		link.Create_back(va, va.size());
+		int repnum = link.renum(k);
+		cout << repnum << endl;
+	}
+	return 0;
+}
