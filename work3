@@ -118,3 +118,166 @@ int main()
 	}
 	return 0;
 }
+//#include<iostream>
+//#include<vector>
+//#include<sstream>
+//#include<fstream>
+//using namespace std;
+//
+//struct node
+//{
+//	int data;
+//	node* next;
+//	node() :next(NULL) {};
+//	node(int data):data(data),next(NULL){}
+//};
+//
+//class linklist
+//{
+//public:
+//	node* head;
+//
+//	linklist()
+//	{
+//		head = new node();
+//	}
+//
+//	void create(vector<int> v, int n)
+//	{
+//		node* s=head;
+//		node* temp;
+//
+//		for (int i = 0; i < n; i++)
+//		{
+//			temp = new node(v[i]);
+//			s->next = temp;
+//			s = temp;
+//		}
+//	}
+//
+//	node* middle(node* head)
+//	{
+//		node* slow = head;
+//		node* fast = head;
+//
+//		while (fast->next != NULL && fast->next->next != NULL)
+//		{
+//			slow = slow->next;
+//			fast = fast->next->next;
+//		}
+//		return slow;
+//	}
+//
+//	node* merge(node* l1, node* l2)
+//	{
+//		node* head = new node();
+//		node* temp = head;
+//		while (l1 != NULL && l2 != NULL)
+//		{
+//			if (l1->data < l2->data)
+//			{
+//				temp->next = l1;
+//				temp = l1;
+//				l1 = l1->next;
+//			}
+//			else
+//			{
+//				temp->next = l2;
+//				temp = l2;
+//				l2 = l2->next;
+//			}
+//		}
+//		if (l1 == NULL)
+//		{
+//			temp->next = l2;
+//		}
+//		else
+//		{
+//			temp->next = l1;
+//		}
+//		return head->next;
+//	}
+//
+//	node* sortlist(node* first)
+//	{
+//		if (first == NULL || first->next == NULL)
+//			return first;
+//
+//		node* temp;
+//		temp = middle(first);
+//		node* headr = temp->next;
+//		temp->next = NULL;
+//
+//		node* left = sortlist(first);
+//		node* right = sortlist(headr);
+//
+//		return merge(left, right);
+//	}
+//
+//	~linklist()
+//	{
+//		node* pre = head;
+//		node* cur = pre->next;
+//
+//		while (cur != NULL)
+//		{
+//			delete pre;
+//			pre = cur;
+//			cur = cur->next;
+//		}
+//
+//		delete pre;
+//
+//	}
+//};
+//
+//int str_to_int(string s)
+//{
+//	int num;
+//	stringstream ss;
+//	ss << s;
+//	ss >> num;
+//	return num;
+//}
+//
+//string int_to_str(int num)
+//{
+//	stringstream ss;
+//	ss << num;
+//	string s = ss.str();
+//	return s;
+//}
+//
+//int main()
+//{
+//	vector<int>v;
+//	ifstream ifs;
+//	ofstream ofs;
+//
+//	ifs.open("in.txt");
+//	string s;
+//	int num;
+//	while (ifs >> s)
+//	{
+//		num = str_to_int(s);
+//		v.push_back(num);
+//	}
+//
+//	linklist llst;
+//	llst.create(v, v.size());
+//
+//	node* result;
+//	result = llst.sortlist(llst.head->next);
+//
+//
+//	ofs.open("out.txt");
+//	while (result != NULL)
+//	{
+//		num = result->data;
+//		s = int_to_str(num);
+//		ofs << s << " ";
+//		result = result->next;
+//	}
+//	ifs.close();
+//	ofs.close();
+//}
