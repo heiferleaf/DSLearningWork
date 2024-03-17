@@ -281,3 +281,220 @@ int main()
 //	ifs.close();
 //	ofs.close();
 //}
+#include<iostream>
+//#include<iomanip>
+//using namespace std;
+//
+//struct node
+//{
+//	int data;
+//	node* next;
+//	node():next(NULL){}
+//	node(int data):data(data),next(NULL){}
+//};
+//
+//class linklist
+//{
+//public:
+//	node* head;
+//	node* tail;
+//	linklist()
+//	{
+//		head = new node();
+//	}
+//
+//	void create(int n)
+//	{
+//		node* s;
+//		node* rear = head;
+//		for (int i = 0; i < n; i++)
+//		{
+//			s = new node(i + 1);
+//			rear->next = s;
+//			rear = s;
+//		}
+//		tail = rear;
+//	}
+//
+//	void Josephus(int num)
+//	{
+//		node* p, * q,*newp;
+//		p = head->next;
+//		newp = head;
+//		newp->next = NULL;
+//		q = tail;
+//		int i = 1;
+//		while (p != q)
+//		{
+//			
+//			if (i++ % num == 0)
+//			{
+//				newp->next = p;
+//				newp = p;
+//				p = p->next;
+//				newp->next = NULL;
+//			}
+//			else
+//			{
+//				q->next = p;
+//				q = q->next;
+//				p = p->next;
+//				q->next = NULL;
+//			}
+//			
+//		}
+//		newp->next = p;
+//		newp = p;
+//		p = p->next;
+//		newp->next = NULL;
+//		tail = newp;
+//		
+//	}
+//
+//	void display()
+//	{
+//		node* s;
+//		s = head->next;
+//		while (s != NULL)
+//		{
+//			
+//			cout << setw(4) << s->data;;
+//			s = s->next;
+//		}
+//		cout << endl;
+//	}
+//
+//	~linklist()
+//	{
+//		node* pre, * cur;
+//		pre = head;
+//		cur = pre->next;
+//		while (cur != NULL)
+//		{
+//			delete pre;
+//			pre = cur;
+//			cur = cur->next;
+//		}
+//		delete pre;
+//	}
+//};
+//
+//int main()
+//{
+//	linklist llst;
+//	int num1, num2;
+//	cin >> num1;
+//	llst.create(num1);
+//	
+//	while (cin >> num2)
+//	{
+//		if (cin.get() == '\n')
+//			break;
+//		llst.Josephus(num2);
+//	}
+//	llst.display();
+//}
+//#include<iostream>
+//#include<vector>
+//using namespace std;
+//
+//struct node
+//{
+//	int data;
+//	node* pre;
+//	node* next;
+//	node():pre(NULL),next(NULL){}
+//	node(int data) :data(data), pre(NULL), next(NULL){}
+//};
+//
+//class dlist
+//{
+//public:
+//	node* dhead;
+//
+//	dlist()
+//	{
+//		dhead = new node();
+//		dhead->next = dhead;
+//		dhead->pre = dhead;
+//	}
+//
+//	void create(vector<int> v, int n)
+//	{
+//		node* rear = dhead;
+//		node* s;
+//
+//		for (int i = 0; i < n; i++)
+//		{
+//			s = new node(v[i]);
+//			rear->next = s;
+//			s->pre = rear;
+//			rear = s;
+//		}
+//		rear ->next = dhead;
+//		dhead->pre = rear;
+//	}
+//
+//	void movesort()
+//	{
+//		node* p = dhead->next;//p为前驱
+//		node* q = p->next;//q为后继
+//
+//		if (p->data < q->data)
+//		{
+//			return;
+//		}
+//		while (q != dhead && q->data < p->data)
+//		{
+//			q = q->next;
+//		}
+//		dhead->next = p->next;
+//		p->next->pre = p->pre;
+//		p->next = q->pre->next;
+//		q->pre->next = p;
+//		p->pre = q->pre;
+//		q->pre = q;
+//	}
+//
+//	void display()
+//	{
+//		node* s = dhead->next;
+//		while (s != dhead)
+//		{
+//			cout << s->data << " ";
+//			s = s->next ;
+//		}
+//	}
+//
+//	~dlist()
+//	{
+//		node* prev = dhead;
+//		node* r = prev->next;
+//		while (r != dhead)
+//		{
+//			prev = r;
+//			r = r->next;
+//			delete prev;
+//		}
+//		delete dhead;
+//	}
+//
+//};
+//
+//int main()
+//{
+//	vector<int>v;
+//	int num;
+//	int k;
+//	cin >> k;
+//	while (k > 0)
+//	{
+//		cin >> num;
+//		v.push_back(num);
+//		k--;
+//	}
+//	dlist dl;
+//	dl.create(v, v.size());
+//	dl.movesort();
+//	dl.display();
+//}
