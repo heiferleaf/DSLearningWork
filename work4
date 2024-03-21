@@ -1,0 +1,361 @@
+//#include<iostream>
+//#include<stack>
+//#include<vector>
+//#include<algorithm>
+//#include<fstream>
+//#include<sstream>
+//using namespace std;
+//
+//int main()
+//{
+//	ifstream ifs;
+//	stringstream ss;
+//	ifs.open("in.txt");
+//	stack<pair<int,int>>a, b;
+//	int num;
+//	string oper, instruction;
+//	char ch;
+//	int val,time=0;
+//	getline(ifs, instruction);
+//	ss << instruction;
+//	ss >> num;
+//	
+//	
+//	while (num--)
+//	{
+//		ss.clear();
+//		getline(ifs, instruction);
+//		ss << instruction;
+//		ss >> oper;
+//		if (oper == "push")
+//		{
+//			ss >> ch >> val;
+//			if (ch == 'A')
+//			{
+//				a.push(make_pair(val, time));
+//				time++;
+//			}
+//			else
+//			{
+//				b.push(make_pair(val, time));
+//				time++;
+//			}
+//		}
+//		else if (oper == "pop")
+//		{
+//			ss >> ch;
+//			if (ch == 'A')
+//			{
+//				if (!a.empty())
+//				{
+//					cout << a.top().first << endl;
+//					a.pop();
+//				}
+//			}
+//			else
+//			{
+//				if (!b.empty())
+//				{
+//					cout << b.top().first << endl;
+//
+//					b.pop();
+//				}
+//			}
+//		}
+//		else
+//		{
+//			vector<pair<int, int>>c;
+//			ss >> ch >> ch;
+//			while (!a.empty() && !b.empty())
+//			{
+//				if (a.top().second > b.top().second)
+//				{
+//					c.push_back(a.top());
+//					a.pop();
+//				}
+//				else
+//				{
+//					c.push_back(b.top());
+//					b.pop();
+//				}
+//			}
+//			if (a.empty())
+//			{
+//				while (!b.empty())
+//				{
+//					c.push_back(b.top());
+//					b.pop();
+//				}
+//			}
+//			else
+//			{
+//				c.push_back(a.top());
+//				a.pop();
+//			}
+//			reverse(c.begin(),c.end());
+//			if (ch == 'B')
+//			{
+//				for (auto i = c.begin(); i < c.end(); i++)
+//				{
+//					a.push(*i);
+//				}
+//			}
+//			else
+//			{
+//				for (auto i = c.begin(); i < c.end(); i++)
+//				{
+//					b.push(*i);
+//				}
+//			}
+//			
+//		}
+//		
+//	}
+//	ifs.close();
+//	return 0;
+//
+//}
+#include<iostream>
+#include<stack>
+#include<vector>
+#include<algorithm>
+#include<fstream>
+#include<sstream>
+using namespace std;
+
+int main()
+{
+	ifstream ifs;
+	stringstream ss;
+	ifs.open("in.txt");
+	stack<pair<int, int>>a, b;
+	int num;
+	string oper, instruction;
+	char ch;
+	int val, time = 0;
+
+	if (!ifs.is_open()) {
+		cout << "Error opening input file\n";
+		return 1;
+	}
+
+	getline(ifs, instruction);
+	ss << instruction;
+	ss >> num;
+
+	while (num--)
+	{
+		ss.clear();
+		getline(ifs, instruction);
+		ss.str(instruction); // Reset stringstream with new instruction
+		ss >> oper;
+
+		if (oper == "push")
+		{
+			ss >> ch >> val;
+			if (ch == 'A')
+			{
+				a.push(make_pair(val, time));
+				time++;
+			}
+			else
+			{
+				b.push(make_pair(val, time));
+				time++;
+			}
+		}
+		else if (oper == "pop")
+		{
+			ss >> ch;
+			if (ch == 'A' && !a.empty())
+			{
+				cout << a.top().first << endl;
+				a.pop();
+			}
+			else if (ch == 'B' && !b.empty())
+			{
+				cout << b.top().first << endl;
+				b.pop();
+			}
+		}
+		else
+		{
+			vector<pair<int, int>>c;
+
+			ss >> ch >> ch;
+
+			while (!a.empty() && !b.empty())
+			{
+				if (a.top().second > b.top().second)
+				{
+					c.push_back(a.top());
+					a.pop();
+				}
+				else
+				{
+					c.push_back(b.top());
+					b.pop();
+				}
+			}
+
+			while (!a.empty())
+			{
+				c.push_back(a.top());
+				a.pop();
+			}
+
+			while (!b.empty())
+			{
+				c.push_back(b.top());
+				b.pop();
+			}
+
+			reverse(c.begin(), c.end());
+
+			if (ch == 'B')
+			{
+				for (auto i = c.begin(); i != c.end(); i++)
+				{
+					a.push(*i);
+				}
+			}
+			else
+			{
+				for (auto i = c.begin(); i != c.end(); i++)
+				{
+					b.push(*i);
+				}
+			}
+		}
+	}
+
+	ifs.close();
+	return 0;
+}
+//#include<iostream>
+//#include<stack>
+//using namespace std;
+//
+//int main()
+//{
+//	int num;
+//	cin >> num;
+//	cin.get();
+//	string in, out,input,output;
+//	stack<char> st;
+//	while(cin >> in)
+//	{
+//		input += in;
+//		if(cin.get()=='\n')
+//		{
+//			break;
+//		}
+//	}
+//	while (cin >> out)
+//	{
+//		output += out;
+//		if(cin.get()=='\n')
+//		{
+//			break;
+//		}	
+//	}
+//	int i = 0;
+//	while (input[i] != output[0])
+//	{
+//		st.push(input[i]);
+//		i++;
+//	}
+//	i++;
+//	int j = 1;
+//	while (j < num && i<num)
+//	{
+//		if (!st.empty()&&st.top() == output[j])
+//		{
+//			st.pop();
+//			j++;
+//		}
+//		else
+//		{
+//			while (i < num && input[i] != output[j])
+//			{
+//				st.push(input[i]);
+//				i++;
+//			}
+//			i++;
+//			j++;
+//		}
+//	}
+//	while (!st.empty() && st.top() == output[j])
+//	{
+//		j++;
+//		st.pop();
+//	}
+//	if (j == num)
+//	{
+//		cout << "true";
+//	}
+//	else
+//	{
+//
+//		cout << "false";
+//	}
+//}
+//#include <iostream>
+//#include <fstream>
+//#include <sstream>
+//#include <vector>
+//#include <stack>
+//
+//using namespace std;
+//
+//class Solution {
+//public:
+//    int evalRPN(vector<string>& tokens) {
+//        stack<int> st;
+//
+//        for (const string& token : tokens) {
+//            if (token == "+" || token == "-" || token == "*" || token == "/") {
+//                int num2 = st.top();
+//                st.pop();
+//                int num1 = st.top();
+//                st.pop();
+//                if (token == "+") {
+//                    st.push(num1 + num2);
+//                }
+//                else if (token == "-") {
+//                    st.push(num1 - num2);
+//                }
+//                else if (token == "*") {
+//                    st.push(num1 * num2);
+//                }
+//                else if (token == "/") {
+//                    st.push(num1 / num2);
+//                }
+//            }
+//            else {
+//                st.push(stoi(token));
+//            }
+//        }
+//
+//        return st.top();
+//    }
+//};
+//
+//int main() {
+//    ifstream infile("in.txt");
+//    string line;
+//    getline(infile, line);
+//    istringstream iss(line);
+//    vector<string> tokens;
+//    string token;
+//    while (getline(iss, token, ',')) {
+//        tokens.push_back(token);
+//    }
+//
+//    Solution sol;
+//    int result = sol.evalRPN(tokens);
+//
+//    cout << result << endl;
+//
+//    return 0;
+//}
