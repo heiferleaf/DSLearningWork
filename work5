@@ -1,0 +1,109 @@
+#include<iostream>
+#include<deque>
+#include<map>
+#include<fstream>
+#include<sstream>
+using namespace std;
+
+deque<int> dq;
+deque<int> dq1;
+map<int, int> Map;
+
+void teamQueue(stringstream& ss)
+{
+	string str;
+	int Id;
+	int number;
+	int temp;
+	bool find = false;
+
+	ss >> str;
+	if (str == "ENQUEUE")
+	{
+		ss >> number;
+		Id = Map[number];
+		if (dq.empty())
+		{
+			dq.push_front(number);
+		}
+		else
+		{
+			while (!dq.empty())
+			{
+				temp = dq.back();
+				if (Map[temp] == Id)
+				{
+					find = true;
+					break;
+				}
+				else
+				{
+					dq1.push_front(temp);
+					dq.pop_back();
+				}
+			}
+			if (!dq.empty())
+			{
+				dq.push_back(number);
+			}
+			while (!dq1.empty())
+			{
+				temp = dq1.front();
+				dq1.pop_front();
+				dq.push_back(temp);
+			}
+			if (!find)
+			{
+				dq.push_back(number);
+			}
+		}
+	}
+	else if (str == "DEQUEUE")
+	{
+		temp = dq.front();
+		dq.pop_front();
+		cout << temp << endl;
+	}
+	else
+		return;
+}
+
+int main()
+{
+	ifstream ifs;
+	ifs.open("in.txt");
+
+	stringstream ss;
+	string str;
+	int num;
+	int num1;
+	int num2;
+
+	getline(ifs, str);
+	ss << str;
+	ss >> num;
+
+	for (int i = 0; i < num; i++)
+	{
+		ss.clear();
+		ifs.get();
+		getline(ifs, str);
+		ss << str;
+		ss >> num1;
+		for (int j = 0; j < num1; j++)
+		{
+			ss >> num2;
+			Map[num2] = i;
+		}
+	}
+	ifs.get();
+	ss.clear();
+	while (getline(ifs, str))
+	{
+		ss.clear();
+		ss << str;
+		teamQueue(ss);
+		ifs.get();
+	}
+	return 0;
+}
