@@ -107,3 +107,159 @@ int main()
 	}
 	return 0;
 }
+//#include <iostream>
+//#include <fstream>
+//#include <queue>
+//#include <vector>
+//
+//using namespace std;
+//
+//struct Player {
+//    int id;
+//    int startSpeed;
+//    int speedIncrease;
+//};
+//
+//struct ComparePlayers {
+//    bool operator() (const Player& p1, const Player& p2) {
+//        if (p1.startSpeed != p2.startSpeed) {
+//            return p1.startSpeed < p2.startSpeed;
+//        }
+//        else {
+//            return p1.id > p2.id; // Reverse order by id if start speeds are equal
+//        }
+//    }
+//};
+//
+//int main() {
+//    ifstream inputFile("in.txt");
+//    if (!inputFile.is_open()) {
+//        cerr << "Error opening the file" << endl;
+//        return 1;
+//    }
+//
+//    int n;
+//    inputFile >> n;
+//
+//    vector<Player> players(n);
+//    for (int i = 0; i < n; i++) {
+//        inputFile >> players[i].startSpeed >> players[i].speedIncrease;
+//        players[i].id = i + 1;
+//    }
+//
+//    priority_queue<Player, vector<Player>, ComparePlayers> pq;
+//
+//    for (int i = 0; i < n; i++) {
+//        pq.push(players[i]);
+//    }
+//
+//    while (!pq.empty()) {
+//        cout << pq.top().id;
+//        pq.pop();
+//        if (!pq.empty()) {
+//            cout << " ";
+//        }
+//    }
+//    cout << endl;
+//
+//    inputFile.close();
+//    return 0;
+//}
+#include<iostream>
+#include<vector>
+#include<fstream>
+#include<sstream>
+using namespace std;
+
+class player
+{
+public:
+	int ID;
+	int first_s;
+	int second_s;
+	int val;
+	player(int id,int f,int s):ID(id),first_s(f),second_s(s),val(first_s){}
+};
+
+bool operator>(player p1, player p2)
+{
+	if (p1.val > p2.val)
+		return true;
+	else if (p1.val == p2.val)
+	{
+		if (p1.ID < p2.ID)
+			return true;
+		else
+			return false;
+	}
+	else
+	{
+		return false;
+	}
+		
+}
+//升序排
+void Sort(vector<player*>& p)
+{
+	int len = p.size();
+	for(int i=0;i<len-1;i++)
+		for (int j = 0; j < len - 1 - i; j++)
+		{
+			if ((*p[j]) > (*p[j + 1]))
+			{
+				swap(p[j], p[j + 1]);
+			}
+		}
+}
+
+void timeAdd(vector<player*>& p)
+{
+	std::vector<player*>::iterator iter;
+	for (iter = p.begin(); iter < p.end(); iter++)
+	{
+		(*iter)->val = (*iter)->val + (*iter)->second_s;
+	}
+}
+
+int main()
+{
+	ifstream ifs("in.txt");
+	stringstream ss;
+	int num;
+	int first_s;
+	int second_s;
+	string str;
+	player* p;
+	vector<player*> vp;
+
+	getline(ifs, str);
+	ss << str;
+	ss >> num;
+
+	for (int i = 1; i <= num; i++)
+	{
+		getline(ifs, str);
+		ss.clear();
+		ss << str;
+		ss >> first_s >> second_s;
+
+		p = new player(i, first_s, second_s);
+		vp.push_back(p);
+	}
+
+	Sort(vp);
+	int Id;
+	Id = vp.back()->ID;
+	vp.pop_back();
+	cout << Id << " ";
+
+	while (!vp.empty())
+	{
+		timeAdd(vp);
+		Sort(vp);
+		Id = vp.back()->ID;
+		vp.pop_back();
+		cout << Id << " ";
+	}
+	return 0;
+}
