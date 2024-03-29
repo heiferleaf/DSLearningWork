@@ -1,0 +1,517 @@
+//#include<iostream>
+//#include<vector>
+//using namespace std;
+//
+//struct node
+//{
+//	int data;
+//	node* next;
+//	node() :next(NULL) {};
+//	node(int data):data(data),next(NULL){}
+//};
+//
+//class linklist
+//{
+//public:
+//	node* head;
+//
+//	linklist()
+//	{
+//		head = new node();
+//	}
+//
+//	void create(vector<int> v, int n)
+//	{
+//		node* s=head;
+//		node* temp;
+//
+//		for (int i = 0; i < n; i++)
+//		{
+//			temp = new node(v[i]);
+//			s->next = temp;
+//			s = temp;
+//		}
+//	}
+//
+//	node* middle(node* head)
+//	{
+//		node* slow = head;
+//		node* fast = head;
+//
+//		while (fast->next != NULL && fast->next->next != NULL)
+//		{
+//			slow = slow->next;
+//			fast = fast->next->next;
+//		}
+//		return slow;
+//	}
+//
+//	node* merge(node* l1, node* l2)
+//	{
+//		node* head = new node();
+//		node* temp = head;
+//		while (l1 != NULL && l2 != NULL)
+//		{
+//			if (l1->data < l2->data)
+//			{
+//				temp->next = l1;
+//				temp = l1;
+//				l1 = l1->next;
+//			}
+//			else if (l1->data == l2->data)
+//			{
+//				temp->next = l1;
+//				temp = temp->next;
+//				l1 = l1->next;
+//				l2 = l2->next;
+//			}
+//			else
+//			{
+//				temp->next = l2;
+//				temp = l2;
+//				l2 = l2->next;
+//			}
+//		}
+//		if (l1 == NULL)
+//		{
+//			temp->next = l2;
+//		}
+//		else
+//		{
+//			temp->next = l1;
+//		}
+//		return head->next;
+//	}
+//
+//	node* sortlist(node* first)
+//	{
+//		if (first == NULL || first->next == NULL)
+//			return first;
+//
+//		node* temp;
+//		temp = middle(first);
+//		node* headr = temp->next;
+//		if (temp == NULL || temp->next == NULL) 
+//			return first;
+//		temp->next = NULL;
+//
+//		node* left = sortlist(first);
+//		node* right = sortlist(headr);
+//
+//		return merge(left, right);
+//	}
+//
+//
+//	~linklist()
+//	{
+//		node* pre = head;
+//		node* cur = pre->next;
+//
+//		while (cur != NULL)
+//		{
+//			delete pre;
+//			pre = cur;
+//			cur = cur->next;
+//		}
+//
+//		delete pre;
+//
+//	}
+//};
+//
+//
+//int main()
+//{
+//	vector<int> v1;
+//	vector<int> v2;
+//	int num;
+//	linklist l1, l2;
+//	linklist ans;
+//	node* l3, * l4,*result;
+//	while (cin >> num)
+//	{
+//		v1.push_back(num);
+//		if (cin.get() == '\n')
+//		{
+//			break;
+//		}
+//	}
+//	while (cin >> num)
+//	{
+//		v2.push_back(num);
+//		if (cin.get() == '\n')
+//		{
+//			break;
+//		}
+//	}
+//	l1.create(v1, v1.size());
+//	l2.create(v2, v2.size());
+//	l3=l1.sortlist(l1.head->next);
+//	l4=l2.sortlist(l2.head->next);
+//
+//	/*while (l3 != NULL)
+//	{
+//		cout << l3->data << " ";
+//		l3 = l3->next;
+//	}
+//	cout << endl;
+//	while (l4 != NULL)
+//	{
+//		cout << l4->data << " ";
+//		l4 = l4->next;
+//	}
+//	cout << endl;*/
+//	result=ans.merge(l3, l4);
+//	while (result != NULL)
+//	{
+//		cout << result->data << " ";
+//		result = result->next;
+//	}
+//	delete l3, l4, result;
+//}
+#include<iostream>
+#include<deque>
+#include<vector>
+using namespace std;
+
+
+
+void serial(int n,vector<int>* v)
+{
+	deque<int> dq;
+	for (int i = 1; i <= n; i++)
+	{
+		dq.push_back(i);
+	}
+	int temp;
+	int num;
+	int count = n;
+	while (count)
+	{
+		num = n - count + 1;
+		for (int j = 0; j < num; j++)
+		{
+			temp = dq.front();
+			dq.pop_front();
+			dq.push_back(temp);
+		}
+		temp = dq.front();
+		dq.pop_front();
+		(*v)[temp - 1] = num;
+		count--;
+	}
+	for (auto iter = (*v).begin(); iter < (*v).end()-1; iter++)
+	{
+		cout << *iter << " ";
+	}
+	cout << (*v).back();
+	
+}
+
+int main()
+{
+	int n;
+	cin >> n;
+
+	int num;
+	vector<int>* v;
+	while (n--)
+	{
+		cin >> num;
+		v = new vector<int>(num);
+		serial(num, v);
+		if (n)
+		{
+			cout << endl;
+		}
+	}
+	return 0;
+}
+//#include<iostream>
+//#include<stack>
+//#include<sstream>
+//using namespace std;
+//
+//stack<char> oper;
+//stack<int> op;
+//
+//class express
+//{
+//public:
+//	string exp;
+//	string postexp;
+//
+//	express(string str)
+//	{
+//		exp = str;
+//		postexp = "";
+//	}
+//
+//	string getpostexp()
+//	{
+//		return postexp;
+//	}
+//
+//	void Trans()
+//	{
+//		int i = 0;
+//		while (exp[i]!='=')
+//		{
+//			char ch = exp[i];
+//			if (ch == ' ')
+//			{
+//				i++;
+//				continue;
+//			}
+//			if (ch == '(')
+//			{
+//				oper.push('(');
+//			}
+//			else if (ch == ')')
+//			{
+//				while (!oper.empty() && oper.top() != '(')
+//				{
+//					postexp += oper.top();
+//					oper.pop();
+//				}
+//				if (!oper.empty())
+//				{
+//					oper.pop();
+//				}
+//			}
+//			else if (ch == '*'||ch=='/')
+//			{
+//				while (!oper.empty()&&oper.top()!='(' && (oper.top() == '*' || oper.top() == '/'))
+//				{
+//					postexp += oper.top();
+//					oper.pop();
+//				}
+//				oper.push(ch);
+//			}
+//			else if (ch == '+' || ch == '-')
+//			{
+//				while (!oper.empty() && oper.top() != '(')
+//				{
+//					postexp += oper.top();
+//					oper.pop();
+//				}
+//				oper.push(ch);
+//			}
+//			else
+//			{
+//				int num=0;
+//				while (exp[i] >= '0' && exp[i] <= '9')
+//				{
+//					num = num * 10 + (exp[i] - '0');
+//					i++;
+//				}
+//				string d;
+//				d= to_string(num);
+//				postexp += d;
+//				postexp += "#";
+//				i--;
+//			}
+//			i++;
+//		}
+//		while (!oper.empty())
+//		{
+//			postexp += oper.top();
+//			oper.pop();
+//		}
+//	}
+//
+//	void cal(int& ans)
+//	{
+//		int i = 0;
+//		int n = postexp.size();
+//		int oper1, oper2,re;
+//		char ch;
+//		while (i < n)
+//		{
+//			ch = postexp[i];
+//			if (ch == '+')
+//			{
+//				oper2 = op.top();
+//				op.pop();
+//				oper1 = op.top();
+//				op.pop();
+//				re = oper1 + oper2;
+//				op.push(re);
+//			}
+//			else if (ch == '-')
+//			{
+//				oper2 = op.top();
+//				op.pop();
+//				oper1 = op.top();
+//				op.pop();
+//				re = oper1 - oper2;
+//				op.push(re);
+//			}
+//			else if (ch == '*')
+//			{
+//				oper2 = op.top();
+//				op.pop();
+//				oper1 = op.top();
+//				op.pop();
+//				re = oper1 * oper2;
+//				op.push(re);
+//			}
+//			else if (ch == '/')
+//			{
+//				oper2 = op.top();
+//				op.pop();
+//				oper1 = op.top();
+//				op.pop();
+//				re = oper1 / oper2;
+//				op.push(re);
+//			}
+//			else if(ch!='#')
+//			{
+//				int num = 0;
+//				while ('0' <= postexp[i] && '9' >= postexp[i])
+//				{
+//					num = num * 10 + (postexp[i] - '0');
+//					i++;
+//				}
+//				op.push(num);
+//				i--;
+//			}
+//			i++;
+//		}
+//		ans = op.top();
+//	}
+//};
+//
+//int main()
+//{
+//	string result;
+//	getline(cin, result);
+//	express e(result);
+//	e.Trans();
+//	int ans;
+//	e.cal(ans);
+//	cout << ans;
+//	return 0;
+//}
+//#include<iostream>
+//#include<fstream>
+//#include<sstream>
+//using namespace std;
+//
+//ofstream ofs("abc.out");
+//
+//struct datanode
+//{
+//	int* data;
+//	datanode* next;
+//	datanode():next(NULL){}
+//	datanode(int data[]) :data(data), next(NULL) {}
+//};
+//
+//class Node
+//{
+//public:
+//	int row, col;
+//	datanode* head,*rear;
+//	Node(int row,int col)
+//	{
+//		this->row = row;
+//		this->col = col;
+//		head = new datanode();
+//		rear = head;
+//	}
+//	void create(int a[])
+//	{
+//		datanode* s = new datanode(a);
+//		rear->next = s;
+//		rear = rear->next;
+//	}
+//
+//	void link(Node& n2,int num1, int num2)
+//	{
+//		datanode* s1=head->next,*s2;
+//		while (s1 != NULL)
+//		{
+//			s2 = n2.head->next;
+//			while (s2 != NULL)
+//			{
+//				if (s1->data[num1 - 1] == s2->data[num2 - 1])
+//				{
+//					for (int i = 0; i < col; i++)
+//					{
+//						ofs << s1->data[i] << " ";
+//					}
+//					for (int i = 0; i < n2.col; i++)
+//					{
+//						ofs << s2->data[i] << " ";
+//					}
+//					ofs << endl;
+//				}
+//				s2 = s2->next;
+//			}
+//			s1 = s1->next;
+//		}
+//	}
+//
+//};
+//
+//int main()
+//{
+//	ifstream ifs("in.txt");
+//	int m1, n1, m2, n2;
+//	string str;
+//	stringstream ss;
+//
+//	getline(ifs, str);
+//	ss << str;
+//	ss >> m1 >> n1;
+//
+//	Node N1(m1, n1);
+//
+//	int num;
+//
+//	
+//	for(int j=0;j<m1;j++)
+//	{
+//		int* a1 = new int[n1];
+//		getline(ifs, str);
+//		ss.clear();
+//		ss << str;
+//		for (int i = 0; i < n1; i++)
+//		{
+//			ss >> num;
+//			a1[i] = num;
+//		}
+//		N1.create(a1);
+//	}
+//
+//	getline(ifs, str);
+//	ss.clear();
+//	ss << str;
+//	ss >> m2 >> n2;
+//
+//	Node N2(m2, n2);
+//
+//	for (int j = 0; j < m2; j++)
+//	{
+//		int* a2 = new int[n2];
+//		getline(ifs, str);
+//		ss.clear();
+//		ss << str;
+//		for (int i = 0; i < n2; i++)
+//		{
+//			ss >> num;
+//			a2[i] = num;
+//		}
+//		N2.create(a2);
+//	}
+//	int num1, num2;
+//	getline(ifs, str);
+//	ss.clear();
+//	ss << str;
+//	ss >> num1 >> num2;
+//
+//	N1.link(N2, num1, num2);
+//
+//	return 0;
+//}
