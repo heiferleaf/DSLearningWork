@@ -115,3 +115,121 @@
 //    int res = largestRectangleArea(v);
 //    cout << res << endl;
 //}
+#include<iostream>
+//#include<vector>
+//#include<string>
+//#include<fstream>
+//
+//using namespace std;
+//
+//void zip(vector<string>& v)
+//{
+//	string str=v[0];
+//	int num=1;
+//	int index = 1;
+//	for (vector<string>::iterator iter = v.begin()+1; iter < v.end(); iter++)
+//	{
+//		if (*iter == str)
+//			num++;
+//		else
+//		{
+//			if (num != 1)
+//			{
+//				v[index - 1] = str;
+//				str = *iter;
+//				v[index] = to_string(num);
+//				num = 1;
+//				index += 2;
+//			}
+//			else
+//			{
+//				v[index - 1] = str;
+//				str = *iter;
+//				index += 1;
+//			}
+//		}
+//	}
+//	if (num > 1)
+//	{
+//		v[index - 1] = str;
+//		v[index] = to_string(num);
+//	}
+//	else
+//	{
+//		v[index - 1] = str;
+//		index -= 1;
+//	}
+//	string ans;
+//	for (int i = 0; i <= index; i++)
+//	{
+//		ans += v[i];
+//	}
+//	for (unsigned i = 0; i < ans.size(); i++)
+//	{
+//		cout << ans[i] << " ";
+//	}
+//}
+//
+//int main()
+//{
+//	ifstream ifs("in.txt");
+//	vector<string>v;
+//	string str;
+//
+//	while (ifs >> str)
+//	{
+//		v.push_back(str);
+//	}
+//
+//	zip(v);
+//
+//	return 0;
+//}
+//#include<iostream>
+//#include<string>
+//#include<fstream>
+//
+//using namespace std;
+//
+//void getnext(string t, int* next)
+//{
+//	int j = 0, k = -1;
+//	next[0] = -1;
+//	while (unsigned(j) < t.length())
+//	{
+//		if (k == -1 || t[j] == t[k])
+//		{
+//			k++;
+//			j++;
+//			next[j] = k;
+//		}
+//		else
+//			k = next[k];
+//	}
+//}
+//
+//int getmin(int num1, int num2, int num3)
+//{
+//	return num1 > num2 ? (num2 > num3 ? num3 : num2) : (num1 > num3 ? num3 : num1);
+//}
+//
+//void same_str(string s1, string s2)
+//{
+//	string s = s1 + s2+" ";
+//	int* next = new int[s.length()];
+//	getnext(s, next);
+//	int num = getmin(next[s.length() - 1],s1.length(),s2.length());
+//	string ans = s.substr(0,num);
+//	cout << ans << " " << num;
+//}
+//
+//int main()
+//{
+//	ifstream ifs("in.txt");
+//	string s1, s2;
+//
+//	ifs >> s1 >> s2;
+//	same_str(s1, s2);
+//
+//	return 0;
+//}
