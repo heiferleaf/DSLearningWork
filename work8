@@ -1,0 +1,593 @@
+//#include<iostream>
+//#include<stack>
+//#include<deque>
+//#include<fstream>
+//#include<iterator>
+//#include<vector>
+//#include<algorithm>
+//using namespace std;
+//
+//struct BTNode
+//{
+//	int data;
+//	BTNode* lchild;
+//	BTNode* rchild;
+//
+//	BTNode():lchild(NULL),rchild(NULL){}
+//	BTNode(int data):data(data),lchild(NULL),rchild(NULL){}
+//
+//};
+//
+//class BTree
+//{
+//	BTNode* root;
+//	deque<BTNode*> de;
+//public:
+//	BTree()
+//	{
+//		root = NULL;
+//		
+//	}
+//	void create(string str)
+//	{
+//		stack<BTNode*> st;
+//		BTNode* p;
+//		bool flag = true;
+//		int i = 0;
+//		while (i < str.size())
+//		{
+//			switch (str[i])
+//			{
+//			case '(':
+//				st.push(p);
+//				flag = true;
+//				break;
+//			case ')':
+//				st.pop();
+//				break;
+//			case ',':
+//				flag = false;
+//				break;
+//			default:
+//				int num = str[i] - '0';
+//				i++;
+//				while (i < str.size() && str[i] >= '0' && str[i] <= '9')
+//				{
+//					num = num * 10 + str[i] - '0';
+//					i++;
+//				}
+//				i--;
+//				p = new BTNode(num);
+//				if (root == NULL)
+//				{
+//					root = p;
+//				}
+//				else if (flag && !st.empty())
+//				{
+//					st.top()->lchild = p;
+//				}
+//				else if (!flag && !st.empty())
+//				{
+//					st.top()->rchild = p;
+//				}
+//				break;
+//			}
+//			i++;
+//		}
+//	}
+//	
+//	void Dispr_to_l()
+//	{
+//		vector<int> v;
+//		de.push_front(root);
+//		BTNode* l, * r;
+//		while (!de.empty())
+//		{
+//			if (de.front()->lchild == NULL&&de.front()->rchild==NULL)
+//				v.push_back(de.front()->data);
+//			l = de.front()->lchild;
+//			r = de.front()->rchild;
+//			if (r != NULL)
+//			{
+//				de.push_back(r);
+//			}
+//			if (l != NULL)
+//			{
+//				de.push_back(l);
+//			}
+//			de.pop_front();
+//		}
+//		reverse(v.begin(), v.end());
+//		copy(v.begin(), v.end(), ostream_iterator<int>(cout, " "));
+//		reverse(v.begin(), v.end());
+//		cout << endl;
+//		copy(v.begin(), v.end(), ostream_iterator<int>(cout, " "));
+//		cout << endl;
+//	}
+//
+//	void Displ_to_r_all()
+//	{
+//		de.push_front(root);
+//		BTNode* l, * r;
+//		while (!de.empty())
+//		{
+//			cout << de.front()->data << " ";
+//			l = de.front()->lchild;
+//			r = de.front()->rchild;
+//		
+//			if (r != NULL)
+//			{
+//				de.push_back(r);
+//			}
+//			if (l != NULL)
+//			{
+//				de.push_back(l);
+//			}
+//			de.pop_front();
+//		}
+//		cout << endl;
+//	}
+//};
+//
+//int main()
+//{
+//	ifstream ifs("in.txt");
+//	string str;
+//	ifs >> str;
+//	BTree tree;
+//	tree.create(str);
+//	
+//	tree.Dispr_to_l();
+//	tree.Displ_to_r_all();
+//}
+//#include<iostream>
+//#include<fstream>
+//#include<stack>
+//using namespace std;
+//
+//struct BTNode
+//{
+//	int val;
+//	BTNode* lchild;
+//	BTNode* rchild;
+//	BTNode():lchild(NULL),rchild(NULL){}
+//	BTNode(int val):val(val),lchild(NULL),rchild(NULL){}
+//};
+//
+//class BTree
+//{
+//public:
+//	BTNode* root;
+//
+//	BTree()
+//	{
+//		root = NULL;
+//	}
+//
+//	~BTree()
+//	{
+//		Dele(root);
+//	}
+//	void Dele(BTNode* b)
+//	{
+//		if (b != NULL)
+//		{
+//			Dele(b->lchild);
+//			Dele(b->rchild);
+//			delete b;
+//		}
+//	}
+//
+//	void create(string str)
+//	{
+//		BTNode* p;
+//		stack<BTNode*> st;
+//		bool flag = true;
+//		int i = 0;
+//		while (i < str.length())
+//		{
+//			switch (str[i])
+//			{
+//			case '(':
+//				flag = true;
+//				st.push(p);
+//				break;
+//			case ')':
+//				st.pop();
+//				break;
+//			case ',':
+//				flag = false;
+//				break;
+//			default:
+//				int num = str[i] - '0';
+//				i++;
+//				while (i < str.size() && str[i] <= '9' && str[i] >= '0')
+//				{
+//					num = num * 10 + str[i] - '0';
+//					i++;
+//				}
+//				i--;
+//				p = new BTNode(num);
+//				if (root == NULL)
+//				{
+//					root = p;
+//				}
+//				else
+//				{
+//					if (flag && !st.empty())
+//					{
+//						st.top()->lchild = p;
+//					}
+//					else
+//					{
+//						st.top()->rchild = p;
+//					}
+//				}
+//			}
+//			i++;
+//		}
+//	}
+//
+//};
+//
+//int getDepth(BTNode* b)
+//{
+//	if (b != NULL)
+//	{
+//		return (max(getDepth(b->lchild), getDepth(b->rchild)) + 1);
+//	}
+//	return 0;
+//}
+//
+//void getdia(BTNode* b,int& ans)
+//{
+//	int left = 0, right = 0;
+//	if (b != NULL)
+//	{
+//		left = getDepth(b->lchild);
+//		right = getDepth(b->rchild);
+//		ans = max(left + right, ans);
+//		getdia(b->lchild,ans);
+//		getdia(b->rchild, ans);
+//	}
+//}
+//
+//int main()
+//{
+//	ifstream ifs("in.txt");
+//	string str;
+//	ifs >> str;
+//	BTree tree;
+//	tree.create(str);
+//	int ans=0;
+//	getdia(tree.root,ans);
+//	cout << ans;
+//	return 0;
+//}
+#pragma once
+#include<iostream>
+#include<stack>
+#include<deque>
+using namespace std;
+
+struct BTNode
+{
+	union
+	{
+		int val;
+		char data;
+	};
+	BTNode* lchild;
+	BTNode* rchild;
+	BTNode() :lchild(NULL), rchild(NULL) {}
+	BTNode(char d) :data(d), lchild(NULL), rchild(NULL) {}
+	BTNode(int val) :val(val), lchild(NULL),rchild(NULL){}
+};
+//二叉树类
+class BTree
+{
+	
+public:
+	BTNode* root;
+	BTree()
+	{
+		root = NULL;
+	}
+	//扫描括号字符串转为整形创立二叉树
+	void createBtree1(string str)
+	{
+		stack<BTNode* >st;
+		BTNode* p;
+		bool flag = true;
+		int i = 0;
+		while (i < str.size())
+		{
+			switch (str[i])
+			{
+			case '(':
+				flag = true;
+				st.push(p);
+				break;
+			case ')':
+				st.pop();
+				break;
+			case ',':
+				flag = false;
+				break;
+			default:
+				int num = str[i] - '0';
+				i++;
+				while (i < str.size() && str[i] >= '0' && str[i] <= '9')
+				{
+					num = num * 10 + str[i] - '0';
+					i++;
+				}
+				i--;
+				p = new BTNode(num);
+				if (root == NULL)
+				{
+					root = p;
+				}
+				else
+				{
+					if (flag && !st.empty())
+					{
+						st.top()->lchild = p;
+					}
+					if (!flag && !st.empty())
+					{
+						st.top()->rchild = p;
+					}
+				}
+				break;
+			}
+			i++;
+		}
+	}
+	//扫描括号字符串创立二叉树
+	void createBtree(string str)
+	{
+		stack<BTNode* >st;
+		BTNode* p;
+		bool flag = true;
+		int i = 0;
+		while (i < str.size())
+		{
+			switch (str[i])
+			{
+			case '(':
+				flag = true;
+				st.push(p);
+				break;
+			case ')':
+				st.pop();
+				break;
+			case ',':
+				flag = false;
+				break;
+			default:
+				p = new BTNode(str[i]);
+				if (root == NULL)
+				{
+					root = p;
+				}
+				else
+				{
+					if (flag && !st.empty())
+					{
+						st.top()->lchild = p;
+					}
+					if (!flag && !st.empty())
+					{
+						st.top()->rchild = p;
+					}
+				}
+				break;
+			}
+			i++;
+		}
+	}
+
+	void DispBTree()
+	{
+		DispBtree1(root);
+	}
+	//	用前缀方式存储
+	void DispBtree1(BTNode* b)
+	{
+		if (b != NULL)
+		{
+			cout << b->data;
+			if (b->lchild != NULL || b->rchild != NULL)
+			{
+				cout << "(";
+				DispBtree1(b->lchild);
+				if (b->rchild != NULL)
+					cout << ",";
+				DispBtree1(b->rchild);
+				cout << ")";
+			}
+		}
+	}
+
+	BTNode* FindNode(char x)
+	{
+		return FindNode1(root, x);
+	}
+	BTNode* FindNode1(BTNode* b, char x)
+	{
+		BTNode* p;
+		if (b == NULL) return NULL;
+		if (b->data == x)
+		{
+			return b;
+		}
+		p=FindNode1(b->lchild, x);
+		if (p == NULL)
+			return FindNode1(b->rchild, x);
+		else
+			return p;
+	}
+
+	void DestroyBTree(BTNode* b)
+	{
+		if (b != NULL)
+		{
+			DestroyBTree(b->lchild);
+			DestroyBTree(b->rchild);
+			delete b;
+		}
+	}
+	~BTree()
+	{
+		DestroyBTree(root);
+		root = NULL;
+	}
+
+	void PreOrder11(BTNode* b)
+	{
+		if (b == NULL)
+			return;
+		cout << b->data;
+		PreOrder11(b->lchild);
+		PreOrder11(b->rchild);
+	}
+	void InOrder11(BTNode* b)
+	{
+		if (b == NULL)
+		{
+			return;
+		}
+		InOrder11(b->lchild);
+		cout << b->data;
+		InOrder11(b->rchild);
+	}
+};
+int sum(BTNode* t)
+{
+	if (t == NULL)
+		return 0;
+	return t->data + sum(t->lchild) + sum(t->rchild);
+}
+
+int NodeCount(BTNode* b)
+{
+	if (b != NULL)
+	{
+		return NodeCount(b->lchild) + NodeCount(b->rchild) + 1;
+	}
+	else
+		return 0;
+}
+
+void swap(BTNode*& left, BTNode*& right)
+{
+	BTNode* temp = left;
+	left = right;
+	right = temp;
+}
+
+void swaptree(BTNode* b)
+{
+	if (b == NULL) {
+		return;
+	}
+	else
+	{
+		BTNode* l=b->lchild, * r=b->rchild;
+		swap(l, r);
+		swaptree(l);
+		swaptree(r);
+	}
+}
+
+int level(int x,int h, BTNode* b)
+{
+	if (b == NULL)
+		return 0;
+	if (b->data == x)
+		return h;
+	int l = level(x, h + 1, b->lchild);
+	if (l != 0)
+	{
+		return l;
+	}
+	else
+	{
+		return level(x, h + 1, b->rchild);
+	}
+}
+//第几层的结点数，解法一：
+void levelcount1(BTNode* b, int h,int x,int& cnt)
+{
+	if (b == NULL)
+	{
+		return;
+	}
+	if (h == x)
+	{
+		cnt++;
+		return;
+	}
+	else
+	{
+		levelcount1(b->lchild, h + 1, x, cnt);
+		levelcount1(b->rchild, h + 1, x, cnt);
+	}
+}
+//解法二
+int levelcount2(BTNode* b, int h, int x)
+{
+	deque<BTNode*> de;
+	de.push_back(b);
+	int cnt = 1;
+	BTNode* l, * r;
+	while (!de.empty()&&h<=x)
+	{
+		if (h == x)
+		{
+			return cnt;
+		}
+		for (int i = 0; i < cnt; i++)
+		{
+			l = de.front()->lchild;
+			r = de.front()->rchild;
+			if (l != NULL)
+				de.push_back(l);
+			if(r!=NULL)
+				de.push_back(r);
+			de.pop_front();
+		}
+		cnt = de.size();
+		h++;
+	}
+	return 0;
+}
+//解法三
+int levelcount3(BTNode* b, int h, int x)
+{
+	deque<BTNode*>de;
+	de.push_back(b);
+	BTNode* last=b,*l,*r;
+	int cnt = 0;
+	while (!de.empty()&&h<=x)
+	{
+		if (h == x)
+		{
+			cnt++;
+		}
+		l = de.front()->lchild;
+		r = de.front()->rchild;
+		if (l != NULL)
+			de.push_back(l);
+		if (r != NULL)
+			de.push_back(r);
+		if (de.front() == last)
+		{
+			last = de.back();
+			h++;
+		}
+		de.pop_front();
+	}
+	return cnt;
+}
