@@ -1,0 +1,241 @@
+//#include<iostream>
+//#include<fstream>
+//#include<sstream>
+//#include<vector>
+//using namespace std;
+//
+//class arrange
+//{
+//public:
+//	vector<vector<int>>ans;
+//	vector<vector<int>> permute(vector<int>& nums)
+//	{
+//		vector<int> trace;
+//		vector<bool> used(nums.size(), false);
+//		all_arrange(trace, used, nums);
+//
+//		return ans;
+//	}
+//	void all_arrange(vector<int>trace, vector<bool>used, vector<int> nums)
+//	{
+//		if (trace.size() == nums.size())
+//		{
+//			ans.push_back(trace);
+//			return;
+//		}
+//		
+//		for (int i = 0; i < nums.size(); i++)
+//		{
+//			if (used[i])
+//				continue;
+//			trace.push_back(nums[i]);
+//			used[i] = true;
+//
+//			all_arrange(trace, used, nums);
+//
+//			trace.pop_back();
+//			used[i] = false;
+//		}
+//	}
+//	void disp()
+//	{
+//		for (int i = 0; i < ans.size(); i++)
+//		{
+//			copy(ans[i].begin(), ans[i].end(), ostream_iterator<int>(cout, " "));
+//			cout << endl;
+//		}
+//	}
+//};
+//
+//int main()
+//{
+//	ifstream ifs("in.txt");
+//	stringstream ss;
+//	string str;
+//	vector<int>nums;
+//	int num;
+//	while (ifs >> str)
+//	{
+//		ss.clear();
+//		ss << str;
+//		ss >> num;
+//		nums.push_back(num);
+//	}
+//	arrange arr;
+//	arr.permute(nums);
+//	arr.disp();
+//	return 0;
+//}
+//#include<iostream>
+//#include<vector>
+//#include<fstream>
+//#include<sstream>
+//using namespace std;
+//
+//class Solution
+//{
+//public:
+//	bool isvalid(vector< string>& board, int row, int col)
+//	{
+//		int n = board.size();
+//		// 检查列是否有皇后互相冲突
+//		for (int i = 0; i <= row; i++) {
+//			if (board[i][col] == 'Q')
+//				return false;
+//		}
+//		// 检查右上方是否有皇后互相冲突
+//		for (int i = row - 1, j = col + 1;
+//			i >= 0 && j < n; i--, j++) {
+//			if (board[i][j] == 'Q')
+//				return false;
+//		}
+//		// 检查左上方是否有皇后互相冲突
+//		for (int i = row - 1, j = col - 1;
+//			i >= 0 && j >= 0; i--, j--) {
+//			if (board[i][j] == 'Q')
+//				return false;
+//		}
+//		return true;
+//	}
+//
+//
+//	void backboard(vector< string>& board, int row, int& res)
+//	{
+//		if (unsigned(row) == board.size())
+//		{
+//			res++;
+//			return;
+//		}
+//
+//		int col = board[row].size();
+//		for (int i = 0; i < col; i++)
+//		{
+//			if (!isvalid(board, row, i))
+//				continue;
+//			board[row][i] = 'Q';
+//			backboard(board, row + 1, res);
+//
+//			board[row][i] = '.';
+//		}
+//	}
+//
+//	int Solvequeen(int num)
+//	{
+//		vector<string> board(num, string(num ,'.'));
+//		int row = 0;
+//		int res=0;
+//
+//		backboard(board, row, res);
+//		return res;
+//	}
+//};
+//int main()
+//{
+//	Solution s;
+//	ifstream ifs("in.txt");
+//	stringstream ss;
+//	string str;
+//	int num;
+//
+//	ifs >> str;
+//	ss << str;
+//	ss >> num;
+//
+//	num=s.Solvequeen(num);
+//	cout << num;
+//	return 0;
+//}
+//#include<iostream>
+//#include<fstream>
+//#include<sstream>
+//using namespace std;
+//
+//int cow_num(int year)
+//{
+//	int a[5] = { 0,0,0,0,0 };
+//	a[0] = 1; a[1] = 1;
+//	int num = 1;
+//	for (int i = 1; i < year; i++)
+//	{
+//		a[(i + 1) % 5] += a[(i % 5)];
+//		a[(i + 3) % 5] = a[(i % 5)];
+//		num += a[(i % 5)];
+//	}
+//	return num;
+//}
+//
+//int main()
+//{
+//	ifstream ifs("in.txt");
+//	stringstream ss;
+//	string str;
+//	int num;
+//
+//	ifs >> str;
+//	ss << str;
+//	ss >> num;
+//
+//	num = cow_num(num);
+//	cout << num;
+//
+//	return 0;
+//}
+//#include<iostream>
+//#include<fstream>
+//#include<sstream>
+//#include<vector>
+//using namespace std;
+//
+//void span(vector< vector< int >>&ans, int num,int x,int y,int start)
+//{
+//	if (num <= 0)
+//		return;
+//	if (num == 1)
+//	{
+//		ans[x][y] = start;
+//		return;
+//	}
+//	for (int i = y; i < y + num; i++)
+//	{
+//		ans[x][i] = start++;
+//	}
+//	for (int j = x + 1; j < x + num; j++)
+//	{
+//		ans[j][y + num - 1] = start++;
+//	}
+//	for (int i = y + num - 2; i >= y; i--)
+//	{
+//		ans[x + num - 1][i] = start++;
+//	}
+//	for (int j = x + num - 2; j > x; j--)
+//	{
+//		ans[j][y] = start++;
+//	}
+//	span(ans, num - 2, x + 1, y + 1, start);
+//}
+//
+//void disp(vector < vector< int>>& ans)
+//{
+//	for (int i = 0; i < ans.size(); i++)
+//		{
+//			copy(ans[i].begin(), ans[i].end(), ostream_iterator<int>(cout, " "));
+//			cout << endl;
+//		}
+//}
+//
+//int main()
+//{
+//	ifstream ifs("in.txt");
+//	stringstream ss;
+//	string str;
+//	int num;
+//	ifs >> str;
+//	ss << str;
+//	ss >> num;
+//
+//	vector< vector <int>>ans(num, vector<int>(num));
+//	span(ans, num, 0, 0, 1);
+//	disp(ans);
+//
+//	return 0;
+//}
