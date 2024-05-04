@@ -1,0 +1,278 @@
+#include<iostream>
+#include<vector>
+#include<stack>
+#include<fstream>
+#include<sstream>
+
+using namespace std;
+
+struct Btnode
+{
+	string data;
+	Btnode* left;
+	Btnode* right;
+
+	Btnode():left(NULL),right(NULL){}
+	Btnode(string data):data(data),left(NULL),right(NULL){}
+};
+
+class BTree
+{
+public:
+	Btnode* root;
+	vector<string> ans;
+	stack<Btnode*> path;
+	BTree()
+	{
+		root = NULL;
+	}
+
+	~BTree()
+	{
+		dele(root);
+	}
+
+	void dele(Btnode* b)
+	{
+		if (b == NULL)
+			return;
+		dele(b->left);
+		dele(b->right);
+		delete b;
+	}
+
+	void searchLevel(int level, Btnode* b)
+	{
+		if (b == NULL||level<0)
+			return;
+		if (level == 0)
+		{
+				ans.push_back(b->data);
+			return;
+		}
+		searchLevel(level - 1, b->left);
+		searchLevel(level - 1, b->right);
+	}
+
+	void findAncestor(string data)
+	{
+		stack<Btnode*> path_temp;
+		Btnode* p = new Btnode(data);
+		find(p, root, path_temp);
+	}
+
+	bool find(Btnode*& p, Btnode* root, stack<Btnode*>path_temp)
+	{
+		if (root == NULL)
+			return false;
+		if (root->data == p->data)
+		{
+			path = path_temp;
+			return true;
+		}
+		path_temp.push(root);
+		if (find(p, root->left, path_temp))
+			return true;
+		else
+			return find(p, root->right, path_temp);
+	}
+
+	void solution(string target, int k)
+	{
+		findAncestor(target);
+		
+		int An_level = 1;
+		Btnode* p,*q;
+		if (k == 0)
+		{
+			ans.push_back(target);
+			return;
+		}
+		if (path.empty())
+		{
+			searchLevel(k, root);
+			return;
+		}
+		if (path.top()->left->data == target)
+		{
+			p = path.top()->left;
+			q = path.top()->right;
+		}
+		else
+		{
+			p = path.top()->right;
+			q = path.top()->left;
+		}
+		searchLevel(k, p);
+
+		while (!path.empty() && An_level < k)
+		{
+			searchLevel(k - An_level-1, q);
+			p = path.top();	path.pop();
+			if (!path.empty())
+			{
+				if (path.top()->left == p)
+					q = path.top()->right;
+				else
+					q = path.top()->left;
+			}
+			An_level += 1;
+		}
+		if (!path.empty())
+			ans.push_back(path.top()->data);
+	}
+
+	void Disp()
+	{
+		cout << "[";
+		int i = 0;
+		for (; i < ans.size() - 1; i++)
+		{
+			cout << ans[i] << ",";
+		}
+		cout << ans[i]<< "]";
+	}
+
+};
+void create(vector<string>& nums, int i, Btnode* & b)
+{
+	if (i < nums.size())
+	{
+		if (nums[i] == "#")
+		{
+			b = NULL;
+			return;
+		}
+		b = new Btnode(nums[i]);
+		create(nums, 2 * i + 1, b->left);
+		create(nums, 2 * i + 2, b->right);
+	}
+	else
+	{
+		b = NULL;
+		return;
+	}
+}
+
+int main()
+{
+	ifstream ifs("in.txt");
+	stringstream ss;
+	string str;
+	vector<string> input;
+	ifs >> str;
+	str = str.substr(1, str.size() - 2);
+	ss << str;
+	while (getline(ss, str, ','))
+		input.push_back(str);
+	ifs >> str;
+	int dis;
+	ifs >> dis;
+
+	BTree tree;
+	create(input, 0, tree.root);
+
+	tree.solution(str, dis);
+	tree.Disp();
+}
+
+#include<iostream>
+#include<vector>
+#include<fstream>
+#include<sstream>
+
+using namespace std;
+
+struct Btnode
+{
+	int val;
+	Btnode* left;
+	Btnode* right;
+
+	Btnode():left(NULL),right(NULL){}
+	Btnode(int val):val(val),left(NULL),right(NULL){}
+};
+
+class BTree
+{
+public:
+	Btnode* root;
+	BTree()
+	{
+		root = NULL;
+	}
+
+	~BTree()
+	{
+		dele(root);
+	}
+
+	void dele(Btnode* b)
+	{
+		if (b == NULL)
+			return;
+		dele(b->left);
+		dele(b->right);
+		delete b;
+	}
+
+	void create(vector<int>& PreOrder, vector<int>& InOrder)
+	{
+		int n = PreOrder.size();
+		root = create1(PreOrder, InOrder, 0, 0, n);
+	}
+
+	Btnode* create1(vector<int>& PreOrder, vector<int>& InOrder, int i, int j, int n)
+	{
+		if (n <= 0)
+			return NULL;
+		int num = PreOrder[i];
+		int p = j;
+		while (InOrder[p] != num)	p++;
+		int k = p - j;
+		Btnode* b = new Btnode(num);
+		b->left = create1(PreOrder, InOrder, i + 1, j, k);
+		b->right = create1(PreOrder, InOrder, i + k + 1, p + 1, n - k - 1);
+		return b;
+	}
+
+	void Disp()
+	{
+		display(root);
+	}
+	
+	void display(Btnode* b)
+	{
+		if (b == NULL)
+			return;
+		display(b->left);
+		display(b->right);
+		cout << b->val << " ";
+	}
+};
+
+int main()
+{
+	ifstream ifs("in.txt");
+	int count,num;
+
+	vector<int> PreOrder;
+	vector<int> InOrder;
+
+	ifs >> count;
+	for (int i = 0; i < count; i++)
+	{
+		ifs >> num;
+		PreOrder.push_back(num);
+	}
+	for (int i = 0; i < count; i++)
+	{
+		ifs >> num;
+		InOrder.push_back(num);
+	}
+
+	BTree tree;
+	tree.create(PreOrder, InOrder);
+	tree.Disp();
+}
+
