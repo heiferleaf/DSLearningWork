@@ -1,0 +1,579 @@
+#pragma once
+#include<iostream>
+#include<vector>
+#include<queue>
+using namespace std;
+
+
+struct HTNode
+{
+	char data;
+	double weight;
+	int parent;
+	int lchild;
+	int rchild;
+	bool flag;
+	HTNode():parent(-1),lchild(-1),rchild(-1){}
+	HTNode(char d,double w):data(d),weight(w),parent(-1),lchild(-1),rchild(-1),flag(true){}
+};
+
+struct HeapNode
+{
+	double w;
+	int i;
+	HeapNode() = default;
+	HeapNode(double w1,int i1):w(w1),i(i1){}
+	bool operator<(const HeapNode& s) const
+	{
+		return w > s.w;
+	}
+};
+
+const int n0 = 10;
+vector<HTNode> ht(2 * n0 - 1);	//没有单分支结点
+
+void CreateHT(vector<int>W,vector<int>D)
+{
+	priority_queue<HeapNode> qu;
+
+	for (int i = 0; i < n0; i++)
+	{
+		ht[i] =HTNode(D[i], W[i]);
+		qu.push(HeapNode(W[i], i));
+	}
+	HeapNode p1, p2;
+	for (int i = n0; i < 2 * n0 - 1; i++)
+	{
+		p1 = qu.top(); qu.pop();
+		p2 = qu.top(); qu.pop();
+
+		ht[i] = HTNode();
+		ht[i].weight = p1.w + p2.w;
+
+		qu.push(HeapNode(ht[i].weight, i));
+
+		ht[i].lchild = p1.i;
+		ht[p1.i].flag = true;
+		ht[p1.i].parent = i;
+
+		ht[i].rchild = p2.i;
+		ht[p2.i].flag = false;
+		ht[p2.i].parent = i;
+	}
+}
+#pragma once
+#include<iostream>
+using namespace std;
+struct BthNode
+{
+	char data;
+	BthNode* lchild, * rchild;
+	int ltag, rtag;
+	BthNode(){}
+	BthNode(char d):data(d),ltag(0),rtag(0),lchild(NULL),rchild(NULL){}
+};
+//中序线索二叉树
+class ThreadTree
+{
+	BthNode* r;		//二叉树的根指针
+	BthNode* root;	//线索二叉树的头节点
+	BthNode* pre;	//指向前驱
+public:
+	ThreadTree()
+	{
+		r = root = NULL;
+	}
+
+	~ThreadTree()
+	{
+		if (r != NULL)	Destroy(r);
+	}
+	void Destroy(BthNode* b)
+	{
+		if (b->ltag == 0)
+			Destroy(b->lchild);
+		if (b->rtag == 0)
+			Destroy(b->rchild);
+		delete b;
+	}
+
+	void createThread()
+	{
+		root = new BthNode();
+		root->ltag = 0; root->rtag = 1;
+		root->rchild = r;
+		if (r == NULL)
+		{
+			root->lchild = root;
+			root->rchild = NULL;
+		}
+		else
+		{
+			root->lchild = r;
+			pre = root;
+			Thread(r);
+			pre->rchild = root;
+			pre->rtag = 1;
+			root->rchild = pre;
+		}
+	}
+	void Thread(BthNode*& p)
+	{
+		if (p != NULL)
+		{
+			Thread(p->lchild);
+			if (p->lchild == NULL)
+			{
+				p->lchild = pre;
+				p->ltag = 1;
+			}
+			else
+				p->ltag = 0;
+			if (pre->rchild == NULL)
+			{
+				pre->rchild = p;
+				pre->rtag = 1;
+			}
+			else
+				pre->rtag = 0;
+			pre = p;
+			Thread(p->rchild);
+		}
+	}
+
+	void ThInOrder()
+	{
+		BthNode* p = root->lchild;
+		while (p != root)
+		{
+			while (p != root && p->ltag == 0)
+			{
+				p = p->lchild;
+			}
+			cout << p->data;
+			while (p->rchild != root && p->rtag == 1)
+			{
+				p = p->rchild;
+				cout << p->data;
+			}
+			p = p->rchild;
+		}
+	}
+};
+//14题
+BTNode* find(BTNode* b,char ch)
+{
+	if (b == NULL)
+	{
+		return nullptr;
+	}
+	if (b->data == ch)
+		return b;
+	BTNode* p = find(b->lchild, ch);
+	if (p != nullptr && p->data == ch)
+		return p;
+	else
+		return find(p->rchild, ch);
+}
+//#include<iostream>
+//#include<queue>
+//#include<vector>
+//using namespace std;
+//
+//struct HTNode
+//{
+//	int weight;
+//	int parent;
+//	int lchild;
+//	int rchild;
+//	bool flag;
+//	HTNode()
+//	{
+//		parent = lchild = rchild = -1;
+//		flag = true;
+//	}
+//	HTNode(int w)
+//	{
+//		weight = w;
+//		parent = lchild = rchild = -1;
+//		flag = true;
+//	}
+//};
+//
+//struct HeapNode
+//{
+//	int i;
+//	int weight;
+//	HeapNode() = default;
+//	HeapNode(int w, int i) :weight(w), i(i){}
+//	bool operator<(const HeapNode& s)const
+//	{
+//		return this->weight > s.weight;
+//	}
+//};
+//
+//void Create(vector<HTNode>& ht, vector<int>&W, int& n0)
+//{
+//	priority_queue<HeapNode> qu;
+//	for (int i = 0; i < n0; i++)
+//	{
+//		ht[i] = HTNode(W[i]);
+//		qu.push(HeapNode(W[i], i));
+//	}
+//	HeapNode p1, p2;
+//	for (int i = n0; i < 2 * n0 - 1; i++)
+//	{
+//		p1 = qu.top(); qu.pop();
+//		p2 = qu.top(); qu.pop();
+//
+//		ht[i] = HTNode(p1.weight + p2.weight);
+//		qu.push(HeapNode(ht[i].weight,i));
+//
+//		ht[i].lchild = p1.i;
+//		ht[p1.i].flag = true;
+//		ht[p1.i].parent = i;
+//
+//		ht[i].rchild = p2.i;
+//		ht[p2.i].flag = false;
+//		ht[p2.i].parent = i;
+//	}
+//}
+//
+//int accumu(vector<HTNode>& ht,int i,int n0,int dep)
+//{
+//	if (i < 0 || ht[i].lchild == -1 && ht[i].rchild == -1 && i >= n0)
+//		return 0;
+//	if (i < n0)
+//	{
+//		return ht[i].weight * dep;
+//	}
+//	int sum = 0;
+//	sum = accumu(ht, ht[i].lchild, n0, dep + 1) + accumu(ht, ht[i].rchild, n0, dep + 1);
+//	return sum;
+//}
+//
+//int main()
+//{
+//	int n0;
+//	int num;
+//	vector<int>W;
+//	
+//	cin >> n0;
+//	vector<HTNode> ht(2*n0-1);
+//
+//	while (cin >> num)
+//	{
+//		W.push_back(num);
+//		if (cin.get() == '\n')
+//			break;
+//	}
+//
+//	Create(ht, W, n0);
+//	int ans = accumu(ht, 2 * n0 - 2, n0, 0);
+//	cout << ans;
+//}
+#pragma once
+#include<iostream>
+#include<stack>
+#include<deque>
+#include<vector>
+using namespace std;
+
+struct BTNode
+{
+	char data;
+	BTNode* lchild;
+	BTNode* rchild;
+	BTNode():lchild(NULL),rchild(NULL){}
+	BTNode(char d):data(d),rchild(NULL),lchild(NULL){}
+};
+
+class BTree
+{
+public:
+	BTNode* root;
+	BTree()
+	{
+		root = NULL;
+	}
+
+	void create(string str)
+	{
+		stack<BTNode*> st;
+		BTNode* p;
+		int i = 0;
+		bool flag = true;
+		while (i < str.size())
+		{
+			char c = str[i];
+			switch (c)
+			{
+			case '(':
+				st.push(p);
+				flag = true;
+				break;
+			case ')':
+				st.pop();
+				break;
+			case ',':
+				flag = false;
+				break;
+			default:
+				p = new BTNode(c);
+				if (root == NULL)
+				{
+					root = p;
+				}
+				else
+				{
+					if (!st.empty() && flag == true)
+					{
+						st.top()->lchild = p;
+					}
+					else
+					{
+						st.top()->rchild = p;
+					}
+				}
+			}
+			i++;
+		}
+	}
+
+	void DispLevel()
+	{
+		DispLevel1(root, 1);
+	}
+	void DispLevel1(BTNode* b,int level)
+	{
+		if (b != NULL)
+		{
+			cout << b->data << " " << level;
+			DispLevel1(b->lchild, level + 1);
+			DispLevel1(b->rchild, level + 1);
+		}
+	}
+
+	void Disp()
+	{
+		DispPre(root);
+		cout << endl;
+		DispPost(root);
+		cout << endl;
+		DispNRL(root);
+		cout << endl;
+	}
+	void DispPre(BTNode* r)
+	{
+		if (r == NULL)
+			return;
+		cout << r->data << " ";
+		DispPre(r->lchild);
+		DispPre(r->rchild);
+	}
+	void DispPost(BTNode* r)
+	{
+		if (r == NULL)
+			return;
+		DispPost(r->lchild);
+		DispPost(r->rchild);
+		cout << r->data << " ";
+	}
+	//2
+	void DispNRL(BTNode* r)
+	{
+		if (r == NULL)
+			return;
+		cout << r->data << " ";
+		DispNRL(r->rchild);
+		DispNRL(r->lchild);
+	}
+	//1
+	int get_n1()
+	{
+		int count = 0;
+		get_n1_count(count, root);
+		return count;
+	}
+	void get_n1_count(int& count, BTNode* r)
+	{
+		if (r == NULL)
+			return;
+		if (r->lchild == NULL && r->rchild != NULL || r->rchild == NULL && r->lchild != NULL)
+			count++;
+		get_n1_count(count, r->lchild);
+		get_n1_count(count, r->rchild);
+	}
+	//6
+	BTNode* copy()
+	{
+		BTNode* newroot = copy1(root);
+		return newroot;
+	}
+	BTNode* copy1(BTNode* r)
+	{
+		if (r == NULL)
+			return NULL;
+		BTNode* newr = new BTNode(r->data);
+		newr->lchild = copy1(r->lchild);
+		newr->rchild =copy1(r->rchild);
+		return newr;
+	}
+	//8
+	int getMindep()
+	{
+		return getmindep(root);
+	}
+	int getmindep(BTNode* p)
+	{
+		if (p == NULL)
+			return 0;
+		return min(getmindep(p->lchild), getmindep(p->rchild)) + 1;
+	}
+	//13
+	int levelcount2(BTNode* b)	
+	{
+		int width = 0;
+		deque<BTNode*> de;
+		de.push_back(b);
+		int cnt = 1;
+		BTNode* l, * r;
+		while (!de.empty() )
+		{
+			width = max(width, cnt);
+			for (int i = 0; i < cnt; i++)
+			{
+				l = de.front()->lchild;
+				r = de.front()->rchild;
+				if (l != NULL)
+					de.push_back(l);
+				if (r != NULL)
+					de.push_back(r);
+				de.pop_front();
+			}
+			cnt = de.size();
+		}
+		return width;
+	}
+	//15
+	BTNode* create_byLI(vector<char> Level, vector<char>InOrder)
+	{
+		int p = 0, q = 1;
+		char c;
+		vector<char> v;
+		v.push_back(Level[0]);
+		while (q != Level.size())
+		{
+			c = Level[p];
+			auto iter = find(InOrder.begin(), InOrder.end(), c);
+			if (find(InOrder.begin(), iter, Level[q]) != InOrder.end())
+			{
+				q++;
+				v.push_back(Level[q]);
+			}
+			else
+				v.push_back('#');
+			if (find(iter, InOrder.end(), Level[q]) != InOrder.end())
+				v.push_back(Level[q]);
+			else
+				v.push_back('#');
+			q++;
+			p++;
+		}
+		return create1(v, 0);
+	}
+	BTNode* create1(vector<char>& v,int i)
+	{
+		if (i >= v.size())
+			return NULL;
+		if (v[i] == '#')
+			return NULL;
+		BTNode* r = new BTNode(v[i]);
+		r->lchild = create1(v, 2 * i + 1);
+		r->rchild = create1(v, 2 * i + 2);
+		return r;
+	}
+};
+//4
+bool similar(BTNode* tree1, BTNode* tree2)
+{
+	BTNode* p1, *p2,*q1,*q2;
+	deque<BTNode*> de1, de2;
+	if (tree1 != NULL)
+		de1.push_back(tree1);
+	if (tree2 != NULL)
+		de2.push_back(tree2);
+	while (!de1.empty() && !de2.empty())
+	{
+		p1 = de1.front()->lchild;
+		p2 = de1.front()->rchild;
+		q1 = de2.front()->lchild;
+		q2 = de2.front()->rchild;
+
+		if (p1 == NULL && q1 != NULL || p1 != NULL && q1 == NULL || p2 != NULL && q2 == NULL || p2 == NULL && q2 != NULL)
+			return false;
+		
+		if (q1 != NULL)
+		{
+			de2.push_back(q1);
+			de1.push_back(p1);
+		}
+		if (q2 != NULL)
+		{
+			de1.push_back(p2);
+			de2.push_back(q2);
+		}
+		de1.pop_front();
+		de2.pop_front();
+	}
+	if (de1.size() + de2.size() != 0)
+		return false;
+	return true;
+}
+#include<iostream>
+using namespace std;
+
+struct BTnode
+{
+	char data;
+	BTnode* lchild;
+	BTnode* rchild;
+	BTnode* parent;
+	BTnode():lchild(NULL),rchild(NULL),parent(NULL){}
+	BTnode(char d):data(d), lchild(NULL), rchild(NULL), parent(NULL){}
+};
+
+class BTree
+{
+	BTnode* root;
+	BTree()
+	{
+		root = nullptr;
+	}
+
+	void solve()
+	{
+		BTnode* pre = root;
+		solve1(pre, root->lchild);
+		solve1(pre, root->rchild);
+	}
+	void solve1(BTnode* pre, BTnode* p)
+	{
+		if (p == NULL)
+		{
+			return;
+		}
+		p->parent = pre;
+		solve1(p, p->lchild);
+		solve1(p, p->rchild);
+	}
+	//9
+	int getLevel(BTnode* node) {
+		if (node->parent == NULL) { // 如果节点的父节点为空，那么它就是根节点。
+			return 1; // 树根节点的绝对层级为1。
+		}
+		else {
+			return getLevel(node->parent) + 1; // 否则，递归调用函数计算其父节点的绝对层级，然后加1。
+		}
+	}
+};
